@@ -1,6 +1,11 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import pyodbc
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = FastAPI()
 
@@ -13,52 +18,45 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configure database connection
+# Configure database connection using environment variables
 DATABASE_CONFIG = {
-    'DRIVER': 'ODBC Driver 17 for SQL Server',
-    'SERVER': 'localhost',  # ή η IP του server σου
-    'DATABASE': 'RachesDB',
-    'UID': 'sa',
-    'PWD': 'v@gelis'
+    'DRIVER': os.getenv('DATABASE_DRIVER'),
+    'SERVER': os.getenv('DATABASE_SERVER'),
+    'DATABASE': os.getenv('DATABASE_NAME'),
+    'UID': os.getenv('DATABASE_USER'),
+    'PWD': os.getenv('DATABASE_PASSWORD')
 }
 
 def get_db_connection():
-    connection_string = (
-        f"DRIVER={{{DATABASE_CONFIG['DRIVER']}}};"
-        f"SERVER={DATABASE_CONFIG['SERVER']};"
-        f"DATABASE={DATABASE_CONFIG['DATABASE']};"
-        f"UID={DATABASE_CONFIG['UID']};"
-        f"PWD={DATABASE_CONFIG['PWD']}"
-    )
     try:
-        conn = pyodbc.connect(connection_string)
-        return conn
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Database connection error: {str(e)}")
+        connection_string = (
+            f"DRIVER={DATABASE_CONFIG['DRIVER']};"
+            f"SERVER={DATABASE_CONFIG['SERVER']};"
+            f"DATABASE={DATABASE_CONFIG['DATABASE']};"
+            f"UID={DATABASE_CONFIG['UID']};"
+            f"PWD={DATABASE_CONFIG['PWD']}"
+        )
+        connection = pyodbc.connect(connection_string)
+        return connection
+    except pyodbc.Error as e:
+        raise HTTPException(status_code=500, detail=f"Database connection error: {e}")
 
 @app.get("/businesses")
 async def get_businesses():
-    conn = get_db_connection()
-    cursor = conn.cursor()
     try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
         cursor.execute("SELECT * FROM businesses")
-        rows = cursor.fetchall()
-        businesses = []
-        for row in rows:
-            businesses.append({
-                "id": row[0],
-                "name": row[1],
-                "address": row[2],
-                "phone": row[3],
-                "email": row[4]
-            })
-        return {"businesses": businesses}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Database query error: {str(e)}")
-    finally:
+        
+        # Ανάκτηση των δεδομένων ως λεξικό
+        rows = dictfetchall(cursor)
         cursor.close()
         conn.close()
+        return rows
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching businesses: {e}")
 
-if __name__ == '__main__':
-    import uvicorn
-    uvicorn.run(app, host='127.0.0.1', port=8000)
+def dictfetchall(cursor):
+    """Return all rows from a cursor as a dict"""
+    columns = [col[0] for col in cursor.description]
+    return [dict(zip(columns, row)) for row in cursor.fetchall()]
