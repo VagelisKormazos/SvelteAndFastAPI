@@ -1,0 +1,44 @@
+-- Δημιουργία της βάσης δεδομένων
+CREATE DATABASE RachesDB;
+
+-- Χρήση της βάσης δεδομένων
+USE RachesDB;
+
+-- Δημιουργία του πίνακα users
+CREATE TABLE users (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    full_name VARCHAR(100),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- Εισαγωγή παραδειγματικών χρηστών
+INSERT INTO users (username, email, password, full_name) VALUES
+('john_doe', 'john@example.com', 'password123', 'John Doe'),
+('jane_smith', 'jane@example.com', 'password456', 'Jane Smith'),
+('alice_wonder', 'alice@example.com', 'password789', 'Alice Wonder'),
+('bob_builder', 'bob@example.com', 'password101', 'Bob Builder'),
+('charlie_brown', 'charlie@example.com', 'password102', 'Charlie Brown');
+
+-- Δημιουργία του πίνακα businesses
+CREATE TABLE businesses (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    owner_id INT,
+    location VARCHAR(100),
+    created_at DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (owner_id) REFERENCES users(id)
+);
+
+
+-- Εισαγωγή παραδειγματικών επιχειρήσεων
+INSERT INTO businesses (name, type, owner_id, location) VALUES
+('Bakery Delight', 'Bakery', 1, 'Main Street 1'),
+('Village Grocery', 'Grocery Store', 2, 'Central Square 5'),
+('Hair Salon Elegance', 'Hair Salon', 3, 'Elm Street 7'),
+('The Coffee Corner', 'Café', 4, 'Park Avenue 3'),
+('Book Haven', 'Bookstore', 5, 'Library Lane 2');

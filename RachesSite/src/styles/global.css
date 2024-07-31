@@ -1,0 +1,77 @@
+
+  /* Styles for the page appearance */
+  .body{
+    background: #2c3e50;
+  }
+  h1, h2, p {
+    font-family: Arial, sans-serif;
+    background-color: null;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  h1 {
+    color: #2c3e50;
+    text-align: center;
+  }
+
+  h2 {
+    color: #34495e;
+    margin-top: 20px;
+  }
+
+  p {
+    color: #7f8c8d;
+    line-height: 1.6;
+  }
+  header{
+    display: flex;
+    justify-content: center;
+}
+main{
+   display: flex;
+   margin:20px auto;
+}
+footer{
+   display: flex;
+   text-align: center;
+}
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-top: 2px solid black; 
+  border-bottom: 2px solid #111010; 
+  width: 100%;
+}
+.siteName {
+  font-size: 2.5em;
+  font-weight: bold;
+}
+.links {
+  display: flex;
+  gap: 30px;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+.links a {
+  text-decoration: none;
+  font-size: 1em;
+  position: relative;
+}
+.links a::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  transition: width .3s;
+}
+.links a:hover::after {
+  width: 100%;
+}
+

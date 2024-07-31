@@ -1,0 +1,9 @@
+Δημιουργία FastAPI εφαρμογής: Πρώτα θα εγκαταστήσουμε το FastAPI και το Uvicorn (για να τρέχουμε τον server).
+Σύνδεση με τη βάση δεδομένων: Θα χρησιμοποιήσουμε SQLAlchemy για την αλληλεπίδραση με τη βάση δεδομένων.
+Δημιουργία των απαραίτητων μοντέλων και routers: Αυτά θα μας επιτρέψουν να διαβάζουμε δεδομένα από τη βάση δεδομένων μέσω HTTP αιτημάτων.
+
+Enable TCP/IP in SQL Server
+https://www.youtube.com/watch?v=Yi9bTbGHznM
+
+Εκκίνηση του FastAPI server:
+    uvicorn main:app --reload
