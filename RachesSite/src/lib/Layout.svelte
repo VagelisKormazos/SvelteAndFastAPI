@@ -14,6 +14,7 @@
          <a href="/contact">Contact Us</a>
          <a href="/history">History</a>
          <a href="/stories">Our Stories</a>
+         <a href="/businesses">Our Businesses</a>
       </div>
    </nav>
  </header>
