@@ -22,7 +22,7 @@ This project combines Svelte and FastAPI technologies to create a fully function
 
 1.  **Copyright Notice**:
 
-*   Adding a copyright notice (with a typo in this case).
+*   Adding a copyright notice .
 
 #### Part 2: FastAPI for Web API
 
